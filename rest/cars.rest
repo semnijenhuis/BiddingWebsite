@@ -1,0 +1,66 @@
+GET http://localhost:3000/cars
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:3000/cars/1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:3000/cars/refresh
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+GET http://localhost:3000/cars/1/winning
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+POST http://localhost:3000/cars
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "brand"     : "Volvo",
+  "model"     : "S60",
+  "auctionEndDateYear" : 2001,
+  "auctionEndDateMonth" : 3,
+  "auctionEndDateDay" : 3,
+  "auctionEndDateHour" : 1,
+  "auctionEndDateMinutes" : 2,
+  "price"          : 3333,
+  "owner" : "sem"
+
+}
+
+###
+PUT http://localhost:3000/cars/1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "brand"     : "skoda",
+  "model"     : "Q1",
+  "auctionEndDateYear" : 2022,
+  "auctionEndDateMonth" : 1,
+  "auctionEndDateDay" : 1,
+  "auctionEndDateHour" : 1,
+  "auctionEndDateMinutes" : 2,
+  "price"          : 12211
+
+}
+
+###
+DELETE http://localhost:3000/cars/1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}

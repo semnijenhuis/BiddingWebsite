@@ -1,0 +1,31 @@
+GET http://localhost:3000/unsafe
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:3000/users
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:3000/users/stephen
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+POST http://localhost:3000/users
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+  "username" : "ries",
+  "email"    : "sem.nijenhuis@live.nl",
+  "password" : "ries",
+  "roles" : "admin"
+}
+
+

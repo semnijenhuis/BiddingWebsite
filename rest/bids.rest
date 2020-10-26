@@ -1,0 +1,17 @@
+GET http://localhost:3000/cars/1/bids
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+POST http://localhost:3000/cars/1/bid/770
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+DELETE http://localhost:3000/cars/1/bid/66
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}

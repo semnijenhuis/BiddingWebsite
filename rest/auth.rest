@@ -1,0 +1,38 @@
+### Login
+POST http://localhost:3000/auth
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username" : "stephen",
+  "password" : "test"
+
+}
+
+> {%
+ client.global.set("token", response.body.token)
+ %}
+
+###
+GET http://localhost:3000/auth
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:3000/auth/won
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:3000/auth/mybids
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+DELETE http://localhost:3000/auth
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}

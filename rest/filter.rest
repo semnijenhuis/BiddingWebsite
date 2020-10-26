@@ -1,0 +1,37 @@
+GET http://localhost:3000/filter/brand/audi
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:3000/filter/model/a3
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:3000/filter/price/max/6000
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+GET http://localhost:3000/filter/price/min/6000
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+GET http://localhost:3000/filter/price/min/5000/max/200000
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+GET http://localhost:3000/filter/search/a3
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
