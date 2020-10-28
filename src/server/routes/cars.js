@@ -92,7 +92,7 @@ router.post('/',(req, res) => {
     auction.cars.push(new_car);
 
     res
-        .status(StatusCodes.CREATED)
+        .status(200)
         .send(new_car)
 
 });

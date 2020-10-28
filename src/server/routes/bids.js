@@ -32,22 +32,29 @@ router.post('/:id/bid',(req,res) => {
     let user;
     let car;
     let newBid;
+    console.log(req)
+    console.log(req.headers)
 
     if (bearerHeader) {
-
+        console.log("1")
         const token = bearerHeader.split(' ')[1]
         const tokenPayLoad = admin.isTokenValid(token);
 
         if(tokenPayLoad) {
+            console.log("2")
             user = auction.users.find(element => element.username === tokenPayLoad.username);
             if(user.username != null){
+                console.log("3")
                 car = auction.cars.find(element => element.id === id);
                 if(car){
+                    console.log("4")
 
                     const lastOffer = car.bids[car.bids.length -1];
 
                     if(lastOffer){
+                        console.log("5")
                         if(offer > lastOffer.offer){
+                            console.log("7")
                             const older = auction.users.find(element => element.username === lastOffer.user)
                             const itemToDelete = older.myBids.indexOf(lastOffer)
                             older.myBids[itemToDelete].bestBid = false;
@@ -64,6 +71,7 @@ router.post('/:id/bid',(req,res) => {
                         }
 
                         else {
+                            console.log("8")
 
                             res
                                 .status(404)
@@ -74,7 +82,7 @@ router.post('/:id/bid',(req,res) => {
 
                     }
                 else {
-                        console.log("4,")
+                        console.log("9")
                         const newBid = new bidCreation.makeABid(user.username,offer);
                         car.price = offer;
                         user.myBids.push(newBid)
@@ -88,21 +96,21 @@ router.post('/:id/bid',(req,res) => {
 
                 }
                 else {
-                    console.log("5")
+                    console.log("10")
                     res
                         .status(StatusCodes.NOT_FOUND)
                         .send( `car (id: ${id}) not found`);
                 }
             }
             else {
-                console.log("6")
+                console.log("11")
                 res
                     .status(400)
                     .send({"msg": ",user cant be found"});
             }
         }
         else {
-            console.log("7")
+            console.log("11")
             res
                 .status(400)
                 .send({"msg": ",Your not logged in"});
@@ -110,7 +118,7 @@ router.post('/:id/bid',(req,res) => {
     }
 
     else {
-        console.log("8")
+        console.log("12")
         res
             .status(401)
             .alert("Log in first")

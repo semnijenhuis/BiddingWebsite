@@ -53,5 +53,8 @@
 		<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">home</a></li>
 		<li><a aria-current="{segment === 'login' ? 'page' : undefined}" href="login">login</a></li>
 		<li><a aria-current="{segment === 'register' ? 'page' : undefined}" href="register">register</a></li>
+		<li><a aria-current="{segment === 'mybids' ? 'page' : undefined}" href="mybids">mybids</a></li>
+		<li><a aria-current="{segment === 'administration' ? 'page' : undefined}" href="administration">administration</a></li>
+		<li><a aria-current="{segment === 'logout' ? 'page' : undefined}" href="logout">logout</a></li>
 	</ul>
 </nav>
