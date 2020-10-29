@@ -58,8 +58,9 @@ router.post('/:id/bid',(req,res) => {
                             const older = auction.users.find(element => element.username === lastOffer.user)
                             const itemToDelete = older.myBids.indexOf(lastOffer)
                             older.myBids[itemToDelete].bestBid = false;
+                            let d = new Date();
 
-                            newBid = new bidCreation.makeABid(car.id,user.username,offer);
+                            newBid = new bidCreation.makeABid(car.id,user.username,offer,d.getHours() + ":" + d.getMinutes(),true);
                             car.price = offer;
 
                             user.myBids.push(newBid)

@@ -40,10 +40,12 @@
 
 
 		if (response.status === 200) {
-			const token = await response.json();
-			window.location.reload();
+			offer = ""
+			await refreshCars()
+			await pressedCar(choosenCar)
+
 			showModal = true
-			goto('/')
+
 
 		}
 		else {
@@ -59,21 +61,22 @@
 		carID = choosen.id
 	}
 
+	async function refreshCars() {
+
+		const response = await fetch('/cars', {
+			method: "GET",
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+		});
+		cars = await response.json();
+	}
+
 	onMount(async () => {
 
+		await refreshCars()
 
-		// const getCars = async  (e) => {
-			const response = await fetch('/cars', {
-				method: "GET",
-				headers: {
-					'Content-Type' : 'application/json',
-					'Accept': 'application/json',
-				},
-			});
-			cars = await response.json();
-
-
-			// return response.json();
 		});
 
 
@@ -116,7 +119,7 @@
 	{#each cars as car (car)}
 <!--		<div>{car.model} </div>-->
 	<section class="auction_box">
-		<a class="auction_title">{car.brand}</a>
+		<h1 class="auction_title">{car.brand}</h1>
 		<p class="auction_description">
 			beautiful {car.brand} {car.model} {car.bodyType}
 			who has been build in {car.buildYear} with starting price of ${car.price}
@@ -184,85 +187,85 @@
 
 
 <style>
-	.auction_box {
-		background: white;
-		margin: 1.5%;
-		flex: 0 0 30%;
-		box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-	}
+	/*.auction_box {*/
+	/*	background: white;*/
+	/*	margin: 1.5%;*/
+	/*	flex: 0 0 30%;*/
+	/*	box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);*/
+	/*}*/
 
-	.auction_title {
-		font-size: 32px;
-		margin: 1rem;
-		display: block;
-		color: black;
-		text-decoration: none;
-	}
+	/*.auction_title {*/
+	/*	font-size: 32px;*/
+	/*	margin: 1rem;*/
+	/*	display: block;*/
+	/*	color: black;*/
+	/*	text-decoration: none;*/
+	/*}*/
 
-	p.auction_description {
-		padding: 0 1rem;
-	}
+	/*p.auction_description {*/
+	/*	padding: 0 1rem;*/
+	/*}*/
 
-	.auction_bid {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-	}
+	/*.auction_bid {*/
+	/*	display: flex;*/
+	/*	flex-direction: row;*/
+	/*	flex-wrap: wrap;*/
+	/*}*/
 
-	.auction_bid_price,
-	.auction_bid_time {
-		flex-direction: column;
-		text-align: center;
-		width: 50%;
-		padding: 1rem 0;
-	}
+	/*.auction_bid_price,*/
+	/*.auction_bid_time {*/
+	/*	flex-direction: column;*/
+	/*	text-align: center;*/
+	/*	width: 50%;*/
+	/*	padding: 1rem 0;*/
+	/*}*/
 
-	.row {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-	}
+	/*.row {*/
+	/*	display: flex;*/
+	/*	flex-wrap: wrap;*/
+	/*	align-items: center;*/
+	/*	justify-content: center;*/
+	/*	width: 100%;*/
+	/*}*/
 
-	.row > .auction_box {
-		background: white;
-		margin: 1.5%;
-		flex: 0 0 30%;
-		box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-	}
+	/*.row > .auction_box {*/
+	/*	background: white;*/
+	/*	margin: 1.5%;*/
+	/*	flex: 0 0 30%;*/
+	/*	box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);*/
+	/*}*/
 
-	h1, figure, p {
-		text-align: center;
-		margin: 0 auto;
-	}
+	/*h1, figure, p {*/
+	/*	text-align: center;*/
+	/*	margin: 0 auto;*/
+	/*}*/
 
-	h1 {
-		font-size: 2.8em;
-		text-transform: uppercase;
-		font-weight: 700;
-		margin: 0 0 0.5em 0;
-	}
+	/*h1 {*/
+	/*	font-size: 2.8em;*/
+	/*	text-transform: uppercase;*/
+	/*	font-weight: 700;*/
+	/*	margin: 0 0 0.5em 0;*/
+	/*}*/
 
-	figure {
-		margin: 0 0 1em 0;
-	}
+	/*figure {*/
+	/*	margin: 0 0 1em 0;*/
+	/*}*/
 
-	img {
-		width: 100%;
-		max-width: 400px;
-		margin: 0 0 1em 0;
-	}
+	/*img {*/
+	/*	width: 100%;*/
+	/*	max-width: 400px;*/
+	/*	margin: 0 0 1em 0;*/
+	/*}*/
 
-	p {
-		margin: 1em auto;
-	}
+	/*p {*/
+	/*	margin: 1em auto;*/
+	/*}*/
 
-	@media (min-width: 480px) {
-		h1 {
-			font-size: 4em;
-		}
-	}
+	/*@media (min-width: 480px) {*/
+	/*	h1 {*/
+	/*		font-size: 4em;*/
+	/*	}*/
+	/*}*/
 </style>
 
 

@@ -13,9 +13,6 @@ const init = () => {
 
     app.use(express.json());
 
-    app.use(express.json());
-
-
     app.use('/cars',carsRouter);
     app.use('/users',usersRouter);
     app.use('/auth',authRouter);
