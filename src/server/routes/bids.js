@@ -32,8 +32,7 @@ router.post('/:id/bid',(req,res) => {
     let user;
     let car;
     let newBid;
-    console.log(req)
-    console.log(req.headers)
+
 
     if (bearerHeader) {
         console.log("1")
@@ -60,7 +59,7 @@ router.post('/:id/bid',(req,res) => {
                             older.myBids[itemToDelete].bestBid = false;
                             let d = new Date();
 
-                            newBid = new bidCreation.makeABid(car.id,user.username,offer,d.getHours() + ":" + d.getMinutes(),true);
+                            newBid = new bidCreation.makeABid(car.id,user.username,offer);
                             car.price = offer;
 
                             user.myBids.push(newBid)
@@ -84,7 +83,7 @@ router.post('/:id/bid',(req,res) => {
                     }
                 else {
                         console.log("9")
-                        const newBid = new bidCreation.makeABid(user.username,offer);
+                        const newBid = new bidCreation.makeABid(car.id,user.username,offer);
                         car.price = offer;
                         user.myBids.push(newBid)
                         car.bids.push(newBid);
@@ -132,7 +131,6 @@ router.post('/:id/bid',(req,res) => {
 router.delete('/:id/bid',(req,res) => {
     const id = parseInt(req.params.id);
     const offer = req.body.offer;
-    console.log(offer)
     const  bearerHeader = req.headers[`authorization`];
     let user;
     let car;

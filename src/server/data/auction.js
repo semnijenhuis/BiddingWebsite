@@ -24,27 +24,27 @@ const car4 = new carCreation.createCar(4,"VW", "Golf","Hatchback",2012, "2020-12
 const car5 = new carCreation.createCar(5,"Audi", "A6","Stationwagen", 2020, "2020-11-17","12:00",2000, owner1.username,"The Audi A6 is an executive car made by the German automaker Audi. Now in its fifth generation, the successor to the Audi 100 is manufactured in Neckarsulm, Germany, and is available in saloon and estate configurations, the latter marketed by Audi as the Avant. Audi's internal numbering treats the A6 as a continuation of the Audi 100 lineage, with the initial A6 designated as a member of the C4-series, followed by the C5, C6, C7, and the C8. The related Audi A7 is essentially a Sportback (fastback) version of the C7-series and C8-series A6 but is marketed under its own separate identity and model designation.");
 const car6 = new carCreation.createCar(6,"Ford", "F150","Pickup", 2008, "2020-10-30","23:59",0, owner2.username,"The twelfth generation F-150 was introduced for the 2009 model year as an update of the Ford full-size truck platform. Similar to its predecessor, these trucks are distinguished by their Super Duty-style grilles and head lamps; standard cab models again have two-doors instead of four. The FlareSide bed was continued until 2010, dropped along with the manual gearbox; outside of Mexico, the Lincoln Mark LT was replaced by the F-150 Platinum. A new model for 2010 included the SVT Raptor, a dedicated off-road pickup.");
 
-const bid1 = new bidCreation.makeABid(1,owner1.username,1000);
-const bid2 = new bidCreation.makeABid(2,owner2.username,5000);
-const bid3 = new bidCreation.makeABid(3,owner3.username,3000);
-const bid4 = new bidCreation.makeABid(4,owner4.username,6000);
-const bid5 = new bidCreation.makeABid(5,owner1.username,6000);
-const bid6 = new bidCreation.makeABid(6,owner2.username,6000);
-
-car1.bids.push(bid1)
-car2.bids.push(bid2)
-car3.bids.push(bid3)
-car4.bids.push(bid4)
-car5.bids.push(bid5)
-car6.bids.push(bid6)
-
-
-owner1.myBids.push(bid1)
-owner2.myBids.push(bid2)
-owner3.myBids.push(bid3)
-owner4.myBids.push(bid4)
-owner1.myBids.push(bid5)
-owner2.myBids.push(bid6)
+// const bid1 = new bidCreation.makeABid(1,owner1.username,1000);
+// const bid2 = new bidCreation.makeABid(2,owner2.username,5000);
+// const bid3 = new bidCreation.makeABid(3,owner3.username,3000);
+// const bid4 = new bidCreation.makeABid(4,owner4.username,6000);
+// const bid5 = new bidCreation.makeABid(5,owner1.username,6000);
+// const bid6 = new bidCreation.makeABid(6,owner2.username,6000);
+//
+// car1.bids.push(bid1)
+// car2.bids.push(bid2)
+// car3.bids.push(bid3)
+// car4.bids.push(bid4)
+// car5.bids.push(bid5)
+// car6.bids.push(bid6)
+//
+//
+// owner1.myBids.push(bid1)
+// owner2.myBids.push(bid2)
+// owner3.myBids.push(bid3)
+// owner4.myBids.push(bid4)
+// owner1.myBids.push(bid5)
+// owner2.myBids.push(bid6)
 
 
 const cars = [car1,car2,car3,car4,car5,car6]

@@ -79,9 +79,9 @@ router.get('/mybids',(req, res) => {
 
     const  bearerHeader = req.headers[`authorization`];
 
-
+    console.log("1")
     if (bearerHeader) {
-
+        console.log("2")
         const token = bearerHeader.split(' ')[1]
 
 
@@ -90,7 +90,7 @@ router.get('/mybids',(req, res) => {
 
 
         if(tokenPayLoad) {
-
+            console.log("3")
             const user = auction.users.find(element => element.username === tokenPayLoad.username);
             if(user.myBids.length > 0){
 
@@ -99,20 +99,21 @@ router.get('/mybids',(req, res) => {
                     .send(user.myBids)
             }
             else {
-
+                console.log("5")
                 res
                     .status(204)
                     .send("no bids here")
             }
         }
         else {
+            console.log("6")
             res
                 .status(401)
                 .send({"msg": "No token Payload"});
         }
     }
     else {
-
+        console.log("7")
         res
             .status(401)
             .send({"msg": "No header"});

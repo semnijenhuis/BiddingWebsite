@@ -3,8 +3,7 @@ const auction = require ('./auction');
 const jwt = require(`jsonwebtoken`);
 
 function isTokenValid (token) {
-    let tokenPayLoad = token.split('.')[1]
-     tokenPayLoad = jwt.decode(token);
+    const tokenPayLoad = jwt.decode(token);
     const user = auction.users.find(element => element.username === tokenPayLoad.username);
     if(user){
         try{
