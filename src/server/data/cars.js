@@ -1,3 +1,5 @@
+this.presentImage = undefined;
+
 function createCar (id,brand,model,bodyType,buildYear,auctionEndDate,auctionEndTime,price,owner,description) {
     this.id = id;
     this.brand = brand;

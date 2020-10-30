@@ -2,11 +2,29 @@
 	export let segment;
 </script>
 
+
+
+<nav>
+	<ul class="menu-bar">
+		<li class="li"><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">home</a></li>
+		<li class="li"><a aria-current="{segment === 'login' ? 'page' : undefined}" href="login">login</a></li>
+		<li class="li"><a aria-current="{segment === 'register' ? 'page' : undefined}" href="register">register</a></li>
+		<li class="li"><a aria-current="{segment === 'mybids' ? 'page' : undefined}" href="mybids">mybids</a></li>
+		<li class="li"><a aria-current="{segment === 'administration' ? 'page' : undefined}" href="administration">administration</a></li>
+		<li class="li"><a aria-current="{segment === 'logout' ? 'page' : undefined}" href="logout">logout</a></li>
+
+	</ul>
+</nav>
+
 <style>
+
 	nav {
 		border-bottom: 1px solid rgba(255,62,0,0.1);
 		font-weight: 300;
 		padding: 0 1em;
+		display: inline-block;
+		text-align: center;
+		list-style-type: none;
 	}
 
 	ul {
@@ -22,8 +40,8 @@
 	}
 
 	li {
-		display: block;
-		float: left;
+		display: inline-block;
+		list-style-type: none;
 	}
 
 	[aria-current] {
@@ -46,16 +64,10 @@
 		padding: 1em 0.5em;
 		display: block;
 	}
+
+
+
+
+
+
 </style>
-
-<nav>
-	<ul>
-		<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">home</a></li>
-		<li><a aria-current="{segment === 'login' ? 'page' : undefined}" href="login">login</a></li>
-		<li><a aria-current="{segment === 'register' ? 'page' : undefined}" href="register">register</a></li>
-		<li><a aria-current="{segment === 'mybids' ? 'page' : undefined}" href="mybids">mybids</a></li>
-		<li><a aria-current="{segment === 'administration' ? 'page' : undefined}" href="administration">administration</a></li>
-		<li><a aria-current="{segment === 'logout' ? 'page' : undefined}" href="logout">logout</a></li>
-
-	</ul>
-</nav>

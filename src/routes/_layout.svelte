@@ -4,15 +4,21 @@
 	export let segment;
 </script>
 
+
+
+
+
 <style>
 	main {
 		position: relative;
 		max-width: 56em;
-		background-color: white;
+		background-color: #c3c3c3;
 		padding: 2em;
 		margin: 0 auto;
 		box-sizing: border-box;
+
 	}
+
 </style>
 
 <Nav {segment}/>

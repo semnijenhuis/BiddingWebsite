@@ -6,11 +6,12 @@
 
 	import Modal from './Modal.svelte';
 
-	let showModal = false;
+
 	import {goto} from "@sapper/app";
 	import {get} from "svelte/store";
 	import {store} from "../store/store";
 
+	let showModal = false;
 	let find = 0;
 	let searchTerm;
 	let cars = [];
@@ -18,14 +19,12 @@
 	let carID;
 	let choosenCar;
 	let tokenJson = get(store).token;
-
 	let offer;
 
 	const addBid = async  (e) => {
+		console.log(offer)
 
 		console.log("hello")
-		e.preventDefault();
-
 
 		const response = await  fetch(`/cars/${carID}/bid`, {
 			method: "POST",
@@ -35,24 +34,21 @@
 				'authorization': 'Bearer '+ tokenJson
 			},
 
-
 			body: JSON.stringify({offer: offer})
 		});
 
 
 		if (response.status === 200) {
+			choosenCar.bids = [...choosenCar.bids,offer]
 			offer = ""
-			await refreshCars()
-			await pressedCar(choosenCar)
-
 			showModal = true
-
-
 		}
 		else {
-			alert("Your not logged in")
+
 			error = await  response.json();
+			alert("your not logged in")
 			console.log(error)
+			showModal = false
 		}
 	}
 
@@ -128,13 +124,14 @@
 	}
 
 
+
 </script>
 
 	<svelte:head>
 		<title>Sapper project template</title>
 	</svelte:head>
 
-<h1>hello</h1>
+
 <form>
 	<select>
 		{#each cars as car}
@@ -170,32 +167,31 @@
 <button on:click="{findItem}" >find car</button>
 <button on:click="{refreshCars}" >reset</button>
 
+
 <div class ="row">
 
-	{#if find > 0}
 
-		<h1>hello</h1>
+	{#each cars as car}
 
-		{/if}
+			<section class="auction_box">
 
+				<h1  class="auction_title">{car.brand}</h1>
 
-	{#each cars as car (car)}
-<!--		<div>{car.model} </div>-->
-	<section class="auction_box">
-		<h1  class="auction_title">{car.brand}</h1>
-		<p  class="auction_description">
-			beautiful {car.brand} {car.model} {car.bodyType}
-			who has been build in {car.buildYear} with starting price of ${car.price}
-			we have {car.bids.length} bids and the auction will end on {car.auctionEndDate} at {car.auctionEndTime} so give it a shot!
-		</p>
-		<div class="auction_bid">
-			<span  class="auction_bid_price">${car.price}</span>
-			<span  class="auction_bid_time">{car.auctionEndTime} hour</span>
-			<button on:click={pressedCar(car)} >
-				show modal
-			</button>
-		</div>
-	</section>
+				<p  class="auction_description">
+					beautiful {car.brand} {car.model} {car.bodyType}
+					who has been build in {car.buildYear} with starting price of ${car.price}
+					we have {car.bids.length} bids and the auction will end on {car.auctionEndDate} at {car.auctionEndTime} so give it a shot!
+				</p>
+
+				<div class="auction_bid">
+					<span  class="auction_bid_price">${car.price}</span>
+					<span  class="auction_bid_time">{car.auctionEndTime} hour</span>
+					<button on:click={pressedCar(car)} >
+						show modal
+					</button>
+				</div>
+
+			</section>
 	{/each}
 
 
@@ -203,41 +199,33 @@
 
 
 {#if showModal}
-	<Modal on:close="{() => showModal = false}">
+	<Modal>
 
-		<div  class="row">
-			<section class="auction_detail">
+		<h1 class="auction_title">{choosenCar.brand} {choosenCar.model}</h1>
+		<p class="auction_description">
+			{choosenCar.description}
+		</p>
 
-				<div id="auctionItem" class="auction_column">
-					<h1 class="auction_title">{choosenCar.brand + choosenCar.model}</h1>
-					<p class="auction_description">
-						{choosenCar.description}
-					</p>
+		<form id="auctionBid" method="" action="/">
+			<input class="auction_bid_amount" type="text" placeholder="amount" bind:value={offer}/><br />
+			<button on:click|preventDefault={addBid}>Bid</button>
+			<span id="errorBid"></span>
+		</form>
 
-					<form id="auctionBid" method="" action="/">
-						<input class="auction_bid_amount" type="text" placeholder="amount" bind:value={offer}/><br />
-						<button on:click={addBid}>Bid</button>
-						<span id="errorBid"></span>
-					</form>
-
-					<div class="auction_detail_bid_list">
-						<h2>Bids</h2>
-						<ul>
-							{#each choosenCar.bids as bid }
-								<li class="auction_detail_bid">
-									<span class="auction_detail_bid_price">${bid.offer}</span>
-									<span class="auction_detail_bid_user">{bid.user}</span>
-									<span class="auction_detail_bid_time">{bid.offertime}</span>
-								</li>
-								{/each}
-
-						</ul>
-					</div>
-				</div>
-			</section>
+		<div class="auction_detail_bid_list">
+			<h2>Bids</h2>
+			<ul>
+				{#each choosenCar.bids as bid }
+					<li class="auction_detail_bid">
+						<span class="auction_detail_bid_price">${bid.offer}</span>
+						<span class="auction_detail_bid_user">{bid.user}</span>
+						<span class="auction_detail_bid_time">{bid.offertime}</span>
+					</li>
+				{/each}
+			</ul>
 		</div>
 
-
+		<button on:click={() => showModal = false}>close </button>
 
 	</Modal>
 {/if}
@@ -247,8 +235,14 @@
 
 
 <style>
-
+	.auction_box {
+		width: 300px;
+		border: 1px solid #aaa;
+		border-radius: 2px;
+		box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+		background: #ffffff;
+		padding: 1em;
+		margin: 0 0 1em 0;
+	}
 
 </style>
-
-
