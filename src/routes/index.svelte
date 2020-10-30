@@ -21,50 +21,51 @@
 
 	let offer;
 
-	// const addBid = async  (e) => {
-	//
-	// 	console.log("hello")
-	// 	e.preventDefault();
-	//
-	//
-	// 	const response = await  fetch(`/cars/${carID}/bid`, {
-	// 		method: "POST",
-	// 		headers: {
-	// 			'Content-Type' : 'application/json',
-	// 			'Accept': 'application/json',
-	// 			'authorization': 'Bearer '+ tokenJson
-	// 		},
-	//
-	//
-	// 		body: JSON.stringify({offer: offer})
-	// 	});
-	//
-	//
-	// 	if (response.status === 200) {
-	// 		offer = ""
-	// 		await refreshCars()
-	// 		await pressedCar(choosenCar)
-	//
-	// 		showModal = true
-	//
-	//
-	// 	}
-	// 	else {
-	// 		alert("Your not logged in")
-	// 		error = await  response.json();
-	// 		console.log(error)
-	// 	}
-	// }
-	//
-	// async function pressedCar(choosen) {
-	// 	console.log("pressed car")
-	// 	showModal = true
-	// 	choosenCar = choosen
-	// 	carID = choosen.id
-	// }
+	const addBid = async  (e) => {
+
+		console.log("hello")
+		e.preventDefault();
+
+
+		const response = await  fetch(`/cars/${carID}/bid`, {
+			method: "POST",
+			headers: {
+				'Content-Type' : 'application/json',
+				'Accept': 'application/json',
+				'authorization': 'Bearer '+ tokenJson
+			},
+
+
+			body: JSON.stringify({offer: offer})
+		});
+
+
+		if (response.status === 200) {
+			offer = ""
+			await refreshCars()
+			await pressedCar(choosenCar)
+
+			showModal = true
+
+
+		}
+		else {
+			alert("Your not logged in")
+			error = await  response.json();
+			console.log(error)
+		}
+	}
+
+	async function pressedCar(choosen) {
+		console.log("pressed car")
+		showModal = true
+		choosenCar = choosen
+		carID = choosen.id
+	}
 
 	async function refreshCars() {
 		console.log("refresh cars " +find)
+
 		const response = await fetch('/cars', {
 			method: "GET",
 			headers: {
@@ -76,11 +77,11 @@
 		cars = await response.json();
 	}
 
-	// onMount(async () => {
-	//
-	// 	await refreshCars()
-	//
-	// 	});
+	onMount(async () => {
+
+		await refreshCars()
+
+		});
 
 
 	const getCar = async  (e) => {
@@ -108,13 +109,23 @@
 		}
 	}
 
-	const findItem = async  () => {
-		console.log("you are finding")
-		console.log(find)
-		find++
+	const findItem = async  (e) => {
+		e.preventDefault();
+		console.log("findItem")
+		console.log(searchTerm)
 
+		if (searchTerm){
+			const response = await fetch(`/filter/search/${searchTerm}`, {
+				method: "GET",
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json',
+					'authorization': 'Bearer '+ tokenJson
+				},
+			});
+			cars = await response.json();
+		}
 	}
-
 
 
 </script>
@@ -124,9 +135,40 @@
 	</svelte:head>
 
 <h1>hello</h1>
-<button on:click="{findItem()}" >
-	find car
-</button>
+<form>
+	<select>
+		{#each cars as car}
+			<option value={car}>
+				{car.brand}
+			</option>
+		{/each}
+	</select>
+</form>
+
+<form>
+	<select>
+		{#each cars as car}
+			<option value={car}>
+				{car.bodyType}
+			</option>
+		{/each}
+	</select>
+</form>
+
+<form>
+	<select>
+		{#each cars as car}
+			<option value={car}>
+				{car.model}
+			</option>
+		{/each}
+	</select>
+</form>
+
+
+<input class="auction_bid_amount" type="text" placeholder="search" bind:value={searchTerm}/><br />
+<button on:click="{findItem}" >find car</button>
+<button on:click="{refreshCars}" >reset</button>
 
 <div class ="row">
 
