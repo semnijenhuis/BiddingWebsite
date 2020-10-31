@@ -72,79 +72,148 @@ router.get('/:id/winning',(req,res) => {
 });
 
 router.post('/',(req, res) => {
+    const  bearerHeader = req.headers[`authorization`];
+    if (bearerHeader) {
+        const token = bearerHeader.split(' ')[1]
+        const tokenPayLoad = admin.isTokenValid(token);
+        if (tokenPayLoad) {
 
-    const new_car = new carCreation.createCar(
+            const new_car = new carCreation.createCar(
 
-        admin.randomCarID(),
-        req.body.brand,
-        req.body.model,
-        req.body.bodyType,
-        req.body.buildYear,
-        req.body.auctionEndDate,
+                admin.randomCarID(),
+                req.body.brand,
+                req.body.model,
+                req.body.bodyType,
+                req.body.buildYear,
+                req.body.auctionEndDate,
 
-        req.body.auctionEndTime,
-        req.body.price,
+                req.body.auctionEndTime,
+                req.body.price,
 
 
-        req.body.owner,
-        req.body.description);
+                req.body.owner,
+                req.body.description);
 
-    auction.cars.push(new_car);
+            auction.cars.push(new_car);
 
-    res
-        .status(200)
-        .send(new_car)
+            res
+                .status(200)
+                .send(new_car)
+
+
+        }
+        else {
+            res
+                .status(401)
+                .send({"msg": "Authentication required"});
+        }
+
+
+    }
+    else {
+
+        res
+            .status(401)
+            .send({"msg": "Empty bearerhead"});
+    }
+
 
 });
 
 router.put('/:id',(req,res) => {
     const id = parseInt(req.params.id);
+    const  bearerHeader = req.headers[`authorization`];
+
+    if (bearerHeader) {
+        const token = bearerHeader.split(' ')[1]
+        const tokenPayLoad = admin.isTokenValid(token);
+
+        if (tokenPayLoad) {
+
+            if(id){
+                const car = auction.cars.find(element => element.id === id);
+                if(car){
+                    car.brand = req.body.brand;
+                    car.model = req.body.model;
+                    car.bodyType = req.body.bodyType;
+                    car.description = req.body.description;
+                    car.buildYear = req.body.buildYear;
+                    car.startingPrice = req.body.startingPrice;
+                    car.auctionEndDate = req.body.auctionEndDate;
+                    car.auctionEndTime = req.body.auctionEndTime;
+
+                    res
+                        .status(200)
+                        .send(car);
+                }
+                else {
+                    res
+                        .status(StatusCodes.NOT_FOUND)
+                        .send( `car (id: ${id}) not found`)
+                    ;
+                }
+            }
 
 
-    if(id){
-        const car = auction.cars.find(element => element.id === id);
-        if(car){
-            car.brand = req.body.brand;
-            car.model = req.body.model;
-            car.auctionEndDateYear = req.body.auctionEndDateYear;
-            car.auctionEndDateMonth = req.body.auctionEndDateMonth;
-            car.auctionEndDateDay = req.body.auctionEndDateDay;
-            car.price = req.body.price;
-            car.auctionEndDate = new Date(parseInt(req.body.auctionEndDateYear),parseInt(req.body.auctionEndDateMonth),parseInt(req.body.auctionEndDateDay))
-
-            res
-                .status(200)
-                .send(car);
         }
         else {
             res
-                .status(StatusCodes.NOT_FOUND)
-                .send( `car (id: ${id}) not found`)
-            ;
-        }
+                .status(401)
+                .send({"msg": "Authentication required"});
     }
+}
+else {
+
+    res
+        .status(401)
+        .send({"msg": "Empty bearerhead"});
+}
+
+
 
 });
 
 router.delete('/:id',(req,res) =>{
     const id = parseInt(req.params.id) ;
 
-    if(id){
-        const car = auction.cars.find(element => element.id === id);
-        if(car){
-            const itemToDelete = auction.cars.indexOf(car)
-             auction.cars.splice(itemToDelete,1);
-            res
-                .status(200)
-                .send(auction.cars);
-        }
+    const  bearerHeader = req.headers[`authorization`];
+
+    if (bearerHeader) {
+        const token = bearerHeader.split(' ')[1]
+        const tokenPayLoad = admin.isTokenValid(token);
+
+        if (tokenPayLoad) {
+            if(id){
+                const car = auction.cars.find(element => element.id === id);
+                if(car){
+                    const itemToDelete = auction.cars.indexOf(car)
+                    auction.cars.splice(itemToDelete,1);
+                    res
+                        .status(200)
+                        .send(auction.cars);
+                }
+                else {
+                    res
+                        .status(StatusCodes.NOT_FOUND)
+                        .send( `car (id: ${id}) not found`)
+                    ;
+                }
+            }
+            }
         else {
             res
-                .status(StatusCodes.NOT_FOUND)
-                .send( `car (id: ${id}) not found`)
-            ;
+                .status(401)
+                .send({"msg": "Authentication required"});
         }
+        }
+        else {
+        res
+            .status(401)
+            .send({"msg": "Empty bearerhead"});
+
     }
+
+
 });
 
 module.exports = router;

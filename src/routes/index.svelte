@@ -13,13 +13,35 @@
 
 	let showModal = false;
 	let find = 0;
-	let searchTerm;
+	let searchTerm = "";
+	let searchBodyType;
 	let cars = [];
 	let error;
+	let valueMin = 0
+	let valueMax = 0
 	let carID;
 	let choosenCar;
 	let choosenBids = []
 	let tokenJson = get(store).token;
+	let searchList = []
+	let maxCar = 100
+	let minCar = 0
+
+
+	function checkPrices() {
+
+		for (let i = 0; i < cars.length; i++) {
+			let checkCar = cars[i]
+			if (checkCar.price > maxCar) {
+				maxCar = checkCar.price
+			}
+
+		}
+
+	}
+
+	$: searchList = cars.filter(item => item.brand.indexOf(searchTerm))
+
 
 	let amount;
 
@@ -50,7 +72,6 @@
 
 		if (response.status === 200) {
 			let newbid = await response.json()
-			console.log(newbid)
 
 			let user = newbid.user
 			let offer = newbid.offer
@@ -60,12 +81,11 @@
 			newBid.offer = offer
 			newBid.offertime = offertime
 
-			console.log(newBid)
-			console.log(choosenBids)
+			choosenBids = [...choosenBids,newbid]
 
 
-			choosenBids.push(newBid)
-			choosenBids = choosenBids
+
+			cars = cars
 
 			offer = ""
 		}
@@ -78,7 +98,7 @@
 		}
 	}
 
-	async function pressedCar(choosen) {
+	 function pressedCar(choosen) {
 		console.log("pressed car")
 		showModal = true
 		choosenCar = choosen
@@ -98,11 +118,15 @@
 			},
 		});
 		cars = await response.json();
+		checkPrices()
+		valueMax =maxCar
+
 	}
 
 	onMount(async () => {
 
 		await refreshCars()
+
 
 		});
 
@@ -158,37 +182,14 @@
 		<title>Sapper project template</title>
 	</svelte:head>
 
-
-<form>
-	<select>
-		{#each cars as car}
-			<option value={car}>
-				{car.brand}
-			</option>
-		{/each}
-	</select>
-</form>
-
-<form>
-	<select>
-		{#each cars as car}
-			<option value={car}>
-				{car.bodyType}
-			</option>
-		{/each}
-	</select>
-</form>
-
-<form>
-	<select>
-		{#each cars as car}
-			<option value={car}>
-				{car.model}
-			</option>
-		{/each}
-	</select>
-</form>
-
+<label>
+	<h1>Min</h1>
+    <input type=number bind:value={valueMin} min={minCar} max={maxCar}>
+	<input type=range bind:value={valueMin} min={minCar} max={maxCar}>
+	<h1>max</h1>
+	<input type=number bind:value={valueMax} min={minCar} max={maxCar}>
+	<input type=range bind:value={valueMax} min={minCar} max={maxCar}>
+</label>
 
 <input class="auction_bid_amount" type="text" placeholder="search" bind:value={searchTerm}/><br />
 <button on:click="{findItem}" >find car</button>
@@ -228,6 +229,8 @@
 
 <div class ="row">
 	{#each cars as car}
+		{#if car.price >= valueMin}
+			{#if car.price <= valueMax}
 		<div class="column">
 			<div class="card">
 
@@ -249,6 +252,8 @@
 
 			</div>
 		</div>
+			{/if}
+			{/if}
 	{/each}
 </div>
 
@@ -257,9 +262,15 @@
 
 
 
-
-
 <style>
+
+	form{
+
+		margin-bottom: 10px;
+	}
+	button{
+		margin-bottom: 10px;
+	}
 
 	textarea { width: 100%; height: 200px; }
 	* {

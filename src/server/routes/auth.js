@@ -38,10 +38,19 @@ router.get('/',(req, res) => {
                     .send(user)
             }
         }
+        else {
+            res
+                .status(401)
+                .send({"msg": "Authentication required"});
+        }
     }
-    res
-        .status(401)
-        .send({"msg": "Empty bearerhead"});
+    else {
+
+        res
+            .status(401)
+            .send({"msg": "Empty bearerhead"});
+    }
+
 });
 
 router.get('/won',(req, res) => {
