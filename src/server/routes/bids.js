@@ -62,11 +62,13 @@ router.post('/:id/bid',(req,res) => {
                             newBid = new bidCreation.makeABid(car.id,user.username,offer);
                             car.price = offer;
 
+
                             user.myBids.push(newBid)
                             car.bids.push(newBid);
+
                             res
                                 .status(200)
-                                .send(car)
+                                .send(newBid)
 
                         }
 
@@ -85,11 +87,13 @@ router.post('/:id/bid',(req,res) => {
                         console.log("9")
                         const newBid = new bidCreation.makeABid(car.id,user.username,offer);
                         car.price = offer;
+
                         user.myBids.push(newBid)
                         car.bids.push(newBid);
+
                         res
                             .status(200)
-                            .send(car)
+                            .send(newBid)
                     }
 
 

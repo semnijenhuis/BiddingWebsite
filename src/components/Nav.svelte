@@ -12,7 +12,6 @@
 		<li class="li"><a aria-current="{segment === 'mybids' ? 'page' : undefined}" href="mybids">mybids</a></li>
 		<li class="li"><a aria-current="{segment === 'administration' ? 'page' : undefined}" href="administration">administration</a></li>
 		<li class="li"><a aria-current="{segment === 'logout' ? 'page' : undefined}" href="logout">logout</a></li>
-
 	</ul>
 </nav>
 

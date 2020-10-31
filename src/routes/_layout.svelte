@@ -11,7 +11,6 @@
 <style>
 	main {
 		position: relative;
-		max-width: 56em;
 		background-color: #c3c3c3;
 		padding: 2em;
 		margin: 0 auto;

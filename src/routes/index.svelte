@@ -18,13 +18,21 @@
 	let error;
 	let carID;
 	let choosenCar;
+	let choosenBids = []
 	let tokenJson = get(store).token;
-	let offer;
 
-	const addBid = async  (e) => {
-		console.log(offer)
+	let amount;
 
-		console.log("hello")
+
+
+	let newBid = {
+		"user" 	: "",
+		"offer"  : "",
+		"offertime" : ""
+	}
+
+	const addBid = async  (amount) => {
+		console.log("starting to bid")
 
 		const response = await  fetch(`/cars/${carID}/bid`, {
 			method: "POST",
@@ -34,19 +42,37 @@
 				'authorization': 'Bearer '+ tokenJson
 			},
 
-			body: JSON.stringify({offer: offer})
+			body: JSON.stringify({offer: amount})
 		});
 
 
+
+
 		if (response.status === 200) {
-			choosenCar.bids = [...choosenCar.bids,offer]
+			let newbid = await response.json()
+			console.log(newbid)
+
+			let user = newbid.user
+			let offer = newbid.offer
+			let offertime = newbid.offertime
+
+			newBid.user = user
+			newBid.offer = offer
+			newBid.offertime = offertime
+
+			console.log(newBid)
+			console.log(choosenBids)
+
+
+			choosenBids.push(newBid)
+			choosenBids = choosenBids
+
 			offer = ""
-			showModal = true
 		}
 		else {
-
-			error = await  response.json();
 			alert("your not logged in")
+			error = await  response.json();
+
 			console.log(error)
 			showModal = false
 		}
@@ -56,6 +82,7 @@
 		console.log("pressed car")
 		showModal = true
 		choosenCar = choosen
+		choosenBids = choosen.bids
 		carID = choosen.id
 	}
 
@@ -167,13 +194,42 @@
 <button on:click="{findItem}" >find car</button>
 <button on:click="{refreshCars}" >reset</button>
 
+{#if showModal}
+	<div class="row">
+	<div class="cardBig">
+		<h1 class="auction_title">{choosenCar.brand} {choosenCar.model}</h1>
+		<p class="auction_description">
+			{choosenCar.description}
+		</p>
+
+		<form id="auctionBid" method="" action="/">
+			<input class="auction_bid_amount" type="text" placeholder="amount" bind:value={amount}/><br />
+			<button on:click|preventDefault={addBid(amount)}>Bid</button>
+			<span id="errorBid"></span>
+		</form>
+
+		<div class="auction_detail_bid_list">
+			<h2>Bids</h2>
+			<ul>
+				{#each choosenBids as bid }
+					<li class="auction_detail_bid">
+						<span class="auction_detail_bid_price">${bid.offer}</span>
+						<span class="auction_detail_bid_user">{bid.user}</span>
+						<span class="auction_detail_bid_time">{bid.offertime}</span>
+					</li>
+				{/each}
+			</ul>
+		</div>
+
+		<button on:click={() => showModal = false}>close </button>
+	</div>
+	</div>
+{/if}
 
 <div class ="row">
-
-
 	{#each cars as car}
-
-			<section class="auction_box">
+		<div class="column">
+			<div class="card">
 
 				<h1  class="auction_title">{car.brand}</h1>
 
@@ -191,58 +247,81 @@
 					</button>
 				</div>
 
-			</section>
+			</div>
+		</div>
 	{/each}
-
-
 </div>
 
 
-{#if showModal}
-	<Modal>
 
-		<h1 class="auction_title">{choosenCar.brand} {choosenCar.model}</h1>
-		<p class="auction_description">
-			{choosenCar.description}
-		</p>
-
-		<form id="auctionBid" method="" action="/">
-			<input class="auction_bid_amount" type="text" placeholder="amount" bind:value={offer}/><br />
-			<button on:click|preventDefault={addBid}>Bid</button>
-			<span id="errorBid"></span>
-		</form>
-
-		<div class="auction_detail_bid_list">
-			<h2>Bids</h2>
-			<ul>
-				{#each choosenCar.bids as bid }
-					<li class="auction_detail_bid">
-						<span class="auction_detail_bid_price">${bid.offer}</span>
-						<span class="auction_detail_bid_user">{bid.user}</span>
-						<span class="auction_detail_bid_time">{bid.offertime}</span>
-					</li>
-				{/each}
-			</ul>
-		</div>
-
-		<button on:click={() => showModal = false}>close </button>
-
-	</Modal>
-{/if}
 
 
 
 
 
 <style>
-	.auction_box {
-		width: 300px;
-		border: 1px solid #aaa;
-		border-radius: 2px;
-		box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-		background: #ffffff;
-		padding: 1em;
-		margin: 0 0 1em 0;
+
+	textarea { width: 100%; height: 200px; }
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		font-family: Arial, Helvetica, sans-serif;
+	}
+
+	/* Float four columns side by side */
+	.column {
+		float: left;
+		width: 33%;
+		margin-bottom: 20px;
+		padding: 0 10px;
+	}
+
+	/* Remove extra left and right margins, due to padding in columns */
+	.row {margin: 0 -5px ;}
+
+	/* Clear floats after the columns */
+	.row:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+	/* Style the counter cards */
+	.card {
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
+		padding: 16px;
+		text-align: center;
+		background-color: #f1f1f1;
+	}
+	.cardBig {
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
+		padding: 16px;
+		text-align: center;
+		margin-bottom: 20px;
+		margin-top: 20px;
+		background-color: #f1f1f1;
+	}
+
+	/* Responsive columns - one column layout (vertical) on small screens */
+	@media screen and (max-width: 600px) {
+		.column {
+			width: 100%;
+			display: block;
+			margin-bottom: 20px;
+		}
+	}
+
+
+	table {
+		width: 50%;
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+		text-align: center;
+		background-color: #009c82;
+		color: white;
+
 	}
 
 </style>
