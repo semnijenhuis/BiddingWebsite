@@ -201,7 +201,7 @@
 
 
     <div class="column">
-        <form class="editForm" method="" action="">
+        <form class="addform" method="" action="">
             <h1 class="auction_title">Add an auction</h1>
             <input type="text" placeholder="Brand" name="brand" bind:value={brand}/><br/>
             <input type="text" placeholder="Model" name="model" bind:value={model}/><br/>
@@ -211,7 +211,9 @@
             <input type="number" placeholder="Starting price" name="startingPrice" bind:value={startingPrice}/><br/>
             <input type="date" placeholder="End date" name="date" bind:value={auctionEndDate}/><br/>
             <input type="time" placeholder="End time" name="time" bind:value={auctionEndTime}/><br/>
+            {#if brand > 0, model >0, bodyType >0, description>0, startingPrice, auctionEndTime,auctionEndDate}
             <input type="submit" on:click={addCar} value="Add"/>
+            {/if}
         </form>
     </div>
 
