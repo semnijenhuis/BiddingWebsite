@@ -4,8 +4,6 @@
 	import {onMount} from "svelte";
 
 
-	import Modal from './Modal.svelte';
-
 
 	import {goto} from "@sapper/app";
 	import {get} from "svelte/store";
