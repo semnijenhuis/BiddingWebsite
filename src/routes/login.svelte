@@ -53,83 +53,21 @@
 {/if}
 
 <style>
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+    .login_form {
+        background-color: white;
+        box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+        padding: 1.5rem;
+        margin-top: 4rem;
+        width: 50%;
     }
 
-    :root {
-        --primary-color: #D96AA7;
-        --secondary-color: #422C73;
-        --complimentary-color: #88BFB5;
-        --contrast-color: #F2E527;
-        --light-color: #D2A9D9;
-    }
-
-
-    nav a {
-        font-size: 40px;
-        color: #fff;
-        text-decoration: none;
-        padding: 20px;
-        text-align: center;
-    }
-
-    nav {
-        position: fixed;
-        left: 0;
-        z-index: 50;
-        display: flex;
-        justify-content: space-around;
-        flex-direction: column;
-        height: 100vh;
-        background: var(--secondary-color);
-    }
-
-    section {
-        position: absolute;
-        top: 0;
-        height: 100vh;
-        width: 0;
-        opacity: 0;
-        transition: all ease-in .5s;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    section h1 {
-        color: #fff;
-        font-size: 50px;
-        text-transform: uppercase;
-        opacity: 0;
-    }
-
-    /* Styles applied on trigger */
-    section:target {
-        opacity: 1;
-        position: absolute;
-        left: 0;
+    .login_form input[type=text],
+    .login_form input[type=password] {
         width: 100%;
-        height: 100%;
-        z-index: 10;
-    }
-
-    section:target h1 {
-        opacity: 0;
-        animation: 2s fadeIn forwards .5s;
-    }
-
-    login {
-        background: var(--primary-color);
-    }
-
-    @keyframes fadeIn {
-        100% {
-            opacity: 1
-        }
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        margin: 1rem 0;
     }
 
 

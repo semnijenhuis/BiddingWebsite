@@ -249,6 +249,24 @@
 
 <style>
 
+    button {
+        background-color: #ffffff; /* Green */
+        border: none;
+        color: #000000;
+        padding: 9px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        -webkit-transition-duration: 0.4s; /* Safari */
+        transition-duration: 0.4s;
+    }
+    button:hover{
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
     form {
 
         margin-bottom: 10px;
@@ -258,19 +276,11 @@
         margin-bottom: 10px;
     }
 
-    textarea {
-        width: 100%;
-        height: 200px;
-    }
 
     * {
         box-sizing: border-box;
     }
 
-    body {
-        text-align: center;
-        font-family: Arial, Helvetica, sans-serif;
-    }
 
     /* Float four columns side by side */
     .column {

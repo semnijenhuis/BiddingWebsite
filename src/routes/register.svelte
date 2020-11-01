@@ -69,5 +69,20 @@
 </form>
 
 <style>
+    .register_form{
+        background-color: white;
+        box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+        padding: 1.5rem;
+        margin-top: 4rem;
+        width: 50%;
+    }
 
+    .register_form input[type=text],
+    .register_form input[type=password]{
+        width: 100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        margin: 1rem 0;
+    }
 </style>
