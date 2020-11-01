@@ -2,10 +2,9 @@
     import {goto} from '@sapper/app';
     import {writable,get } from 'svelte/store'
     import {store} from "../store/store";
-    import Nav from '../components/Nav.svelte';
-
 
     const count = writable(0)
+    export let loginUser = []
 
 
     let username;
@@ -25,23 +24,11 @@
             body: JSON.stringify({username: username, password:password})
         });
 
-        let user;
         if (response.status === 200) {
             const token = await response.json();
             store.set(token)
             let tokenJson = get(store).token;
-
-            const getuser = await fetch('/auth', {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'authorization': 'Bearer ' + tokenJson
-                },
-            });
-            let loginUser = await getuser.json();
-            store.set(loginUser)
-
+            console.log(tokenJson)
 
             goto('/')
 

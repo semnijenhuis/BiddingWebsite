@@ -27,6 +27,7 @@
 	let maxCar = 100
 	let minCar = 0
 
+	console.log(tokenJson)
 
 	function checkPrices() {
 
@@ -90,9 +91,9 @@
 			offer = ""
 		}
 		else {
-			alert("your not logged in")
-			error = await  response.json();
 
+			error = await  response.json();
+			alert(error.msg)
 			console.log(error)
 			showModal = false
 		}
@@ -332,7 +333,28 @@
 		text-align: center;
 		background-color: #009c82;
 		color: white;
-
 	}
 
+
+	table th {
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+		text-align: center;
+		background-color: #009c82;
+		color: white;
+	}
+
+	table tr:nth-child(even){ background-color: #f2f2f2; }
+
+	table tr:hover { background-color: #ddd; }
+
+	table td, table th {
+		border: 1px solid #ddd;
+		padding: 0.5rem;
+		text-align: center;
+	}
+
+	table i {
+		cursor: pointer;
+	}
 </style>

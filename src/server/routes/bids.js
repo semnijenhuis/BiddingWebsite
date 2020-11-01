@@ -34,7 +34,7 @@ router.post('/:id/bid',(req,res) => {
     let newBid;
 
 
-    if (bearerHeader) {
+    if (bearerHeader !== "Bearer undefined") {
         console.log("1")
         const token = bearerHeader.split(' ')[1]
         const tokenPayLoad = admin.isTokenValid(token);
@@ -51,24 +51,30 @@ router.post('/:id/bid',(req,res) => {
                     const lastOffer = car.bids[car.bids.length -1];
 
                     if(lastOffer){
-                        console.log("5")
-                        if(offer > lastOffer.offer){
-                            console.log("7")
-                            const older = auction.users.find(element => element.username === lastOffer.user)
-                            const itemToDelete = older.myBids.indexOf(lastOffer)
-                            older.myBids[itemToDelete].bestBid = false;
-                            let d = new Date();
+                        if (offer > car.price) {
 
-                            newBid = new bidCreation.makeABid(car.id,user.username,offer);
-                            car.price = offer;
+                            console.log("5")
+                            if(offer > lastOffer.offer){
+                                console.log("7")
+                                const older = auction.users.find(element => element.username === lastOffer.user)
+                                const itemToDelete = older.myBids.indexOf(lastOffer)
+                                older.myBids[itemToDelete].bestBid = false;
+                                let d = new Date();
+
+                                newBid = new bidCreation.makeABid(car.id,user.username,offer);
+                                car.price = offer;
 
 
-                            user.myBids.push(newBid)
-                            car.bids.push(newBid);
+                                user.myBids.push(newBid)
+                                car.bids.push(newBid);
 
-                            res
-                                .status(200)
-                                .send(newBid)
+                                res
+                                    .status(200)
+                                    .send(newBid)
+
+
+                        }
+
 
                         }
 
@@ -77,13 +83,15 @@ router.post('/:id/bid',(req,res) => {
 
                             res
                                 .status(404)
-                                .send("offer to low")
+                                .send({"msg":"offer to low"})
 
                         }
 
 
                     }
                 else {
+                    if (offer > car.price) {
+
                         console.log("9")
                         const newBid = new bidCreation.makeABid(car.id,user.username,offer);
                         car.price = offer;
@@ -95,6 +103,13 @@ router.post('/:id/bid',(req,res) => {
                             .status(200)
                             .send(newBid)
                     }
+                       else {
+                        res
+                            .status(404)
+                            .send({"msg":"offer to low"})
+
+                    }
+                    }
 
 
 
@@ -103,7 +118,7 @@ router.post('/:id/bid',(req,res) => {
                     console.log("10")
                     res
                         .status(StatusCodes.NOT_FOUND)
-                        .send( `car (id: ${id}) not found`);
+                        .send( {"msg":`car (id: ${id}) not found`});
                 }
             }
             else {
@@ -125,7 +140,7 @@ router.post('/:id/bid',(req,res) => {
         console.log("12")
         res
             .status(401)
-            .alert("Log in first")
+            .send({"msg":"Log in first"})
 
     }
 

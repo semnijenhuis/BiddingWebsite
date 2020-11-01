@@ -124,44 +124,49 @@ router.put('/:id',(req,res) => {
     const id = parseInt(req.params.id);
     const  bearerHeader = req.headers[`authorization`];
 
-    if (bearerHeader) {
+    if (bearerHeader !== "Bearer undefined") {
         const token = bearerHeader.split(' ')[1]
         const tokenPayLoad = admin.isTokenValid(token);
 
         if (tokenPayLoad) {
+            if (tokenPayLoad.roles.includes("admin")) {
 
-            if(id){
-                const car = auction.cars.find(element => element.id === id);
-                if(car){
-                    car.brand = req.body.brand;
-                    car.model = req.body.model;
-                    car.bodyType = req.body.bodyType;
-                    car.description = req.body.description;
-                    car.buildYear = req.body.buildYear;
-                    car.startingPrice = req.body.startingPrice;
-                    car.auctionEndDate = req.body.auctionEndDate;
-                    car.auctionEndTime = req.body.auctionEndTime;
+                if(id){
+                    const car = auction.cars.find(element => element.id === id);
+                    if(car){
+                        car.brand = req.body.brand;
+                        car.model = req.body.model;
+                        car.bodyType = req.body.bodyType;
+                        car.description = req.body.description;
+                        car.buildYear = req.body.buildYear;
+                        car.startingPrice = req.body.startingPrice;
+                        car.auctionEndDate = req.body.auctionEndDate;
+                        car.auctionEndTime = req.body.auctionEndTime;
 
-                    res
-                        .status(200)
-                        .send(car);
-                }
-                else {
-                    res
-                        .status(StatusCodes.NOT_FOUND)
-                        .send( `car (id: ${id}) not found`)
-                    ;
+                        res
+                            .status(200)
+                            .send(car);
+                    }
+                    else {
+                        res
+                            .status(StatusCodes.NOT_FOUND)
+                            .send( `car (id: ${id}) not found`)
+                        ;
+                    }
                 }
             }
-
-
+            else {
+                res
+                    .status(401)
+                    .send({"msg": "Your not a admin"});
+            }
         }
         else {
             res
                 .status(401)
-                .send({"msg": "Authentication required"});
+                .send({"msg": "Empty tokenpayload"});
+        }
     }
-}
 else {
 
     res
@@ -175,36 +180,58 @@ else {
 
 router.delete('/:id',(req,res) =>{
     const id = parseInt(req.params.id) ;
-
     const  bearerHeader = req.headers[`authorization`];
 
-    if (bearerHeader) {
+    if (bearerHeader !== "Bearer undefined") {
         const token = bearerHeader.split(' ')[1]
-        const tokenPayLoad = admin.isTokenValid(token);
+        console.log(bearerHeader)
 
-        if (tokenPayLoad) {
-            if(id){
-                const car = auction.cars.find(element => element.id === id);
-                if(car){
-                    const itemToDelete = auction.cars.indexOf(car)
-                    auction.cars.splice(itemToDelete,1);
-                    res
-                        .status(200)
-                        .send(auction.cars);
+        if (token)  {
+            const tokenPayLoad = admin.isTokenValid(token);
+            if (tokenPayLoad) {
+
+                if (tokenPayLoad.roles.includes("admin")) {
+                    if(id){
+                        const car = auction.cars.find(element => element.id === id);
+                        if(car){
+                            const itemToDelete = auction.cars.indexOf(car)
+                            auction.cars.splice(itemToDelete,1);
+                            res
+                                .status(200)
+                                .send(auction.cars);
+                        }
+                        else {
+                            res
+                                .status(StatusCodes.NOT_FOUND)
+                                .send( `car (id: ${id}) not found`)
+                            ;
+                        }
+                    }
                 }
                 else {
+                    console.log("your not a admin")
                     res
-                        .status(StatusCodes.NOT_FOUND)
-                        .send( `car (id: ${id}) not found`)
-                    ;
+                        .status(401)
+                        .send({"msg": "Your not a Admin"});
                 }
+
+
             }
+            else {
+                res
+                    .status(401)
+                    .send({"msg": "Authentication required"});
             }
-        else {
+        }
+    else {
             res
                 .status(401)
-                .send({"msg": "Authentication required"});
+                .send({"msg": "Not logged in"});
+
         }
+
+
+
         }
         else {
         res
