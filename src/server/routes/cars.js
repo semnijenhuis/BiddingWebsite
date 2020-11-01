@@ -1,20 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const {StatusCodes,} = require('http-status-codes');
-const auction = require ('../data/auction');
-const admin = require ('../data/admin');
-const carCreation = require ('../data/cars');
+const auction = require('../data/auction');
+const admin = require('../data/admin');
+const carCreation = require('../data/cars');
 
-router.get('/',(req,res) =>{
+router.get('/', (req, res) => {
     console.log("good")
     const userCopy = JSON.parse(JSON.stringify(auction.cars));
     res
-        // .status(200)
-
+        .status(200)
         .send(userCopy.map(admin.filterCar));
 });
 
-router.get('/refresh',(req,res) =>{
+router.get('/refresh', (req, res) => {
     admin.refreshWinners();
     const userCopy = JSON.parse(JSON.stringify(auction.cars));
     res
@@ -22,64 +21,61 @@ router.get('/refresh',(req,res) =>{
         .send(userCopy.map(admin.filterCar));
 });
 
-router.get('/:id',(req,res) => {
-const id = parseInt(req.params.id);
-
-if(id){
- const car = auction.cars.find(element => element.id === id);
-    if(car){
-        res
-            .status(200)
-            .send(car);
-    }
-    else {
-        res
-            .status(StatusCodes.NOT_FOUND)
-            .send( `car (id: ${id}) not found`)
-        ;
-    }
-}
-
-});
-
-router.get('/:id/winning',(req,res) => {
+router.get('/:id', (req, res) => {
     const id = parseInt(req.params.id);
 
-    if(id){
-        let car = auction.cars.find(element => element.id === id);
-
-        let price = 0;
-        let winner;
-            for (let i = 0; i <car.bids.length; i++){
-                if (car.bids[i].offer > price){
-                    price = car.bids[i].offer
-                    winner = car.bids[i].user
-                }
-            }
-        if(car){
+    if (id) {
+        const car = auction.cars.find(element => element.id === id);
+        if (car) {
             res
                 .status(200)
-                .send(`the winner at the moment is ${winner} with a bid of $${price}`);
-        }
-        else {
+                .send(car);
+        } else {
             res
                 .status(StatusCodes.NOT_FOUND)
-                .send( `car (id: ${id}) not found`)
+                .send(`car (id: ${id}) not found`)
             ;
         }
     }
 
 });
 
-router.post('/',(req, res) => {
-    const  bearerHeader = req.headers[`authorization`];
-    if (bearerHeader) {
+router.get('/:id/winning', (req, res) => {
+    const id = parseInt(req.params.id);
+
+    if (id) {
+        let car = auction.cars.find(element => element.id === id);
+
+        let price = 0;
+        let winner;
+        for (let i = 0; i < car.bids.length; i++) {
+            if (car.bids[i].offer > price) {
+                price = car.bids[i].offer
+                winner = car.bids[i].user
+            }
+        }
+        if (car) {
+            res
+                .status(200)
+                .send(`the winner at the moment is ${winner} with a bid of $${price}`);
+        } else {
+            res
+                .status(StatusCodes.NOT_FOUND)
+                .send(`car (id: ${id}) not found`)
+            ;
+        }
+    }
+
+});
+
+router.post('/', (req, res) => {
+    const bearerHeader = req.headers[`authorization`];
+    if (bearerHeader !== "Bearer undefined") {
         const token = bearerHeader.split(' ')[1]
         const tokenPayLoad = admin.isTokenValid(token);
         if (tokenPayLoad) {
 
             const new_car = new carCreation.createCar(
-
                 admin.randomCarID(),
                 req.body.brand,
                 req.body.model,
@@ -101,28 +97,22 @@ router.post('/',(req, res) => {
                 .send(new_car)
 
 
-        }
-        else {
+        } else {
             res
                 .status(401)
                 .send({"msg": "Authentication required"});
         }
 
-
-    }
-    else {
-
+    } else {
         res
             .status(401)
-            .send({"msg": "Empty bearerhead"});
+            .send({"msg": "Empty bearerhead, your not logged in"});
     }
-
-
 });
 
-router.put('/:id',(req,res) => {
+router.put('/:id', (req, res) => {
     const id = parseInt(req.params.id);
-    const  bearerHeader = req.headers[`authorization`];
+    const bearerHeader = req.headers[`authorization`];
 
     if (bearerHeader !== "Bearer undefined") {
         const token = bearerHeader.split(' ')[1]
@@ -131,9 +121,9 @@ router.put('/:id',(req,res) => {
         if (tokenPayLoad) {
             if (tokenPayLoad.roles.includes("admin")) {
 
-                if(id){
+                if (id) {
                     const car = auction.cars.find(element => element.id === id);
-                    if(car){
+                    if (car) {
                         car.brand = req.body.brand;
                         car.model = req.body.model;
                         car.bodyType = req.body.bodyType;
@@ -146,101 +136,79 @@ router.put('/:id',(req,res) => {
                         res
                             .status(200)
                             .send(car);
-                    }
-                    else {
+                    } else {
                         res
                             .status(StatusCodes.NOT_FOUND)
-                            .send( `car (id: ${id}) not found`)
-                        ;
+                            .send(`car (id: ${id}) not found`);
                     }
                 }
-            }
-            else {
+            } else {
                 res
                     .status(401)
                     .send({"msg": "Your not a admin"});
             }
-        }
-        else {
+        } else {
             res
                 .status(401)
                 .send({"msg": "Empty tokenpayload"});
         }
+    } else {
+        res
+            .status(401)
+            .send({"msg": "Empty bearerhead"});
     }
-else {
-
-    res
-        .status(401)
-        .send({"msg": "Empty bearerhead"});
-}
-
-
 
 });
 
-router.delete('/:id',(req,res) =>{
-    const id = parseInt(req.params.id) ;
-    const  bearerHeader = req.headers[`authorization`];
+router.delete('/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const bearerHeader = req.headers[`authorization`];
 
     if (bearerHeader !== "Bearer undefined") {
         const token = bearerHeader.split(' ')[1]
         console.log(bearerHeader)
 
-        if (token)  {
+        if (token) {
             const tokenPayLoad = admin.isTokenValid(token);
             if (tokenPayLoad) {
 
                 if (tokenPayLoad.roles.includes("admin")) {
-                    if(id){
+                    if (id) {
                         const car = auction.cars.find(element => element.id === id);
-                        if(car){
+                        if (car) {
                             const itemToDelete = auction.cars.indexOf(car)
-                            auction.cars.splice(itemToDelete,1);
+                            auction.cars.splice(itemToDelete, 1);
                             res
                                 .status(200)
                                 .send(auction.cars);
-                        }
-                        else {
+                        } else {
                             res
                                 .status(StatusCodes.NOT_FOUND)
-                                .send( `car (id: ${id}) not found`)
-                            ;
+                                .send(`car (id: ${id}) not found`);
                         }
                     }
-                }
-                else {
+                } else {
                     console.log("your not a admin")
                     res
                         .status(401)
                         .send({"msg": "Your not a Admin"});
                 }
 
-
-            }
-            else {
+            } else {
                 res
                     .status(401)
                     .send({"msg": "Authentication required"});
             }
-        }
-    else {
+        } else {
             res
                 .status(401)
                 .send({"msg": "Not logged in"});
-
         }
-
-
-
-        }
-        else {
+    } else {
         res
             .status(401)
             .send({"msg": "Empty bearerhead"});
-
     }
-
-
 });
 
 module.exports = router;

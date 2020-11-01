@@ -1,27 +1,23 @@
 <script>
     import {goto} from '@sapper/app';
-    import {writable,get } from 'svelte/store'
+    import {get} from 'svelte/store'
     import {store} from "../store/store";
-
-    const count = writable(0)
-    export let loginUser = []
-
 
     let username;
     let password;
     let error;
 
-    const doLogin = async  (e) => {
+    const doLogin = async (e) => {
         console.log("hello")
         e.preventDefault();
 
-        const response = await  fetch('/auth', {
+        const response = await fetch('/auth', {
             method: "POST",
             headers: {
-                'Content-Type' : 'application/json',
+                'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            body: JSON.stringify({username: username, password:password})
+            body: JSON.stringify({username: username, password: password})
         });
 
         if (response.status === 200) {
@@ -37,24 +33,24 @@
             console.log(error)
         }
     }
+
 </script>
 
 
 <div class="row">
     <form class="login_form" method="" action="">
         <h1 class="auction_title">Login</h1>
-        <input type="text" name ="username" id="username" placeholder="username" bind:value={username}/><br />
-        <input type="password" name ="password" id="password" placeholder="password" bind:value={password}/><br />
+        <input type="text" name="username" id="username" placeholder="username" bind:value={username}/><br/>
+        <input type="password" name="password" id="password" placeholder="password" bind:value={password}/><br/>
         {#if username, password}
-        <button on:click={doLogin}>login</button>
-            {/if}
+            <button on:click={doLogin}>login</button>
+        {/if}
     </form>
 </div>
 
-
 {#if error}
     <span class="error">Invalid username/password, try again. Error:{error.msg}</span>
-    {/if}
+{/if}
 
 <style>
 
@@ -72,11 +68,6 @@
         --light-color: #D2A9D9;
     }
 
-    .container {
-        background: #191919;
-        min-height: 100vh;
-        font-family: Montserrat, sans-serif;
-    }
 
     nav a {
         font-size: 40px;
@@ -132,22 +123,13 @@
     }
 
     login {
-        background:var(--primary-color);
-    }
-    #second {
-        background: var(--complimentary-color);
-    }
-
-    #third {
-        background: var(--contrast-color);
-    }
-
-    #fourth {
-        background: var(--light-color);
+        background: var(--primary-color);
     }
 
     @keyframes fadeIn {
-        100% { opacity:1 }
+        100% {
+            opacity: 1
+        }
     }
 
 

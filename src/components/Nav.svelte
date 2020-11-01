@@ -1,23 +1,7 @@
 
 <script>
-
-	import {store} from "../store/store";
-	import {get} from "svelte/store";
-	let tokenJson = get(store).token;
-	console.log(tokenJson)
-
-	export let user = false;
-	export let admin = false
-	export let empty = true
-
 	export let segment;
-
-
-
-
 </script>
-
-
 	<nav>
 		<ul class="menu-bar">
 			<li class="li"><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">home</a></li>
@@ -28,11 +12,6 @@
 			<li class="li"><a aria-current="{segment === 'logout' ? 'page' : undefined}" href="logout">logout</a></li>
 		</ul>
 	</nav>
-
-
-
-
-
 <style>
 
 	nav {

@@ -1,80 +1,70 @@
 const express = require(`express`);
 const router = express.Router();
 const {StatusCodes,} = require('http-status-codes');
-const auction = require ('../data/auction');
-const admin = require ('../data/admin');
-const userCreation = require ('../data/users');
+const auction = require('../data/auction');
+const admin = require('../data/admin');
+const userCreation = require('../data/users');
 
-router.get('/',(req, res) => {
-const userCopy = JSON.parse(JSON.stringify(auction.users));
+router.get('/', (req, res) => {
+    const userCopy = JSON.parse(JSON.stringify(auction.users));
     res
         .status(200)
         .send(userCopy.map(admin.filterUser));
 });
 
-router.get('/:username',(req,res) => {
+router.get('/:username', (req, res) => {
     const username = req.params.username;
 
 
-    if(username){
+    if (username) {
         const user = auction.users.find(element => element.username === username);
-        if(user){
+        if (user) {
             res
                 .status(200)
-        }
-        else {
+        } else {
             res
                 .status(StatusCodes.NOT_FOUND)
-                .send( `user ${username} cannot be found`)
+                .send(`user ${username} cannot be found`)
             ;
         }
     }
 
 });
 
-router.post('/',(req, res) => {
- const userData = req.body;
- let free  = false;
+router.post('/', (req, res) => {
+    const userData = req.body;
+    let free = false;
     let newUser;
 
- if (userData) {
+    if (userData) {
 
-     for (let i = 0; i < auction.users.length; i++) {
-         if(userData.username === auction.users[i].username){
-             free = true
-         }
+        for (let i = 0; i < auction.users.length; i++) {
+            if (userData.username === auction.users[i].username) {
+                free = true
+            }
 
-     }
+        }
 
-     if (free === false){
-         newUser = new userCreation.createUser(admin.randomUserID(),userData.username,userData.email,userData.password,userData.roles);
-         newUser.roles.push("user")
-         auction.users.push(newUser);
-         console.log("its created")
-         res
-             .send(newUser)
-             .status(200)
-     }
-        else {
+        if (free === false) {
+            newUser = new userCreation.createUser(admin.randomUserID(), userData.username, userData.email, userData.password, userData.roles);
+            newUser.roles.push("user")
+            auction.users.push(newUser);
+            console.log("its created")
+            res
+                .send(newUser)
+                .status(200)
+        } else {
 
-         console.log("allreaadyyyyy")
+            console.log("allreaadyyyyy")
+            res
+                .status(400)
+        }
+
+    } else {
         res
-            .status(400)
-
-     }
-
-
- }
- else {
-     res
-         .status(204)
-         .send("body is empty");
-
- }
-
-
-
-
+            .status(204)
+            .send({"msg": " empty body"});
+    }
 });
 
 module.exports = router;

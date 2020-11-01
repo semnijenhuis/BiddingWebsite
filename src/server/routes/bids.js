@@ -1,69 +1,62 @@
 const express = require('express');
 const router = express.Router();
 const {StatusCodes,} = require('http-status-codes');
-const auction = require ('../data/auction');
-const admin = require ('../data/admin');
-const bidCreation = require ('../data/bid');
+const auction = require('../data/auction');
+const admin = require('../data/admin');
+const bidCreation = require('../data/bid');
 
-router.get('/:id/bids',(req,res) => {
+router.get('/:id/bids', (req, res) => {
     const id = parseInt(req.params.id);
 
-    if(id){
+    if (id) {
         const car = auction.cars.find(element => element.id === id);
-        if(car){
+        if (car) {
             res
                 .status(200)
                 .send(car.bids);
-        }
-        else {
+        } else {
             res
                 .status(StatusCodes.NOT_FOUND)
-                .send( `car (id: ${id}) not found`)
+                .send(`car (id: ${id}) not found`)
             ;
         }
     }
 
 });
 
-router.post('/:id/bid',(req,res) => {
+router.post('/:id/bid', (req, res) => {
     const id = parseInt(req.params.id);
     const offer = parseInt(req.body.offer);
-    const  bearerHeader = req.headers[`authorization`];
+    const bearerHeader = req.headers[`authorization`];
     let user;
     let car;
     let newBid;
 
-
     if (bearerHeader !== "Bearer undefined") {
-        console.log("1")
+
         const token = bearerHeader.split(' ')[1]
         const tokenPayLoad = admin.isTokenValid(token);
 
-        if(tokenPayLoad) {
-            console.log("2")
+        if (tokenPayLoad) {
+
             user = auction.users.find(element => element.username === tokenPayLoad.username);
-            if(user.username != null){
-                console.log("3")
+            if (user.username != null) {
+
                 car = auction.cars.find(element => element.id === id);
-                if(car){
-                    console.log("4")
+                if (car) {
 
-                    const lastOffer = car.bids[car.bids.length -1];
-
-                    if(lastOffer){
+                    const lastOffer = car.bids[car.bids.length - 1];
+                    if (lastOffer) {
                         if (offer > car.price) {
 
-                            console.log("5")
-                            if(offer > lastOffer.offer){
-                                console.log("7")
+                            if (offer > lastOffer.offer) {
+
                                 const older = auction.users.find(element => element.username === lastOffer.user)
                                 const itemToDelete = older.myBids.indexOf(lastOffer)
                                 older.myBids[itemToDelete].bestBid = false;
                                 let d = new Date();
-
-                                newBid = new bidCreation.makeABid(car.id,user.username,offer);
+                                newBid = new bidCreation.makeABid(car.id, user.username, offer);
                                 car.price = offer;
-
 
                                 user.myBids.push(newBid)
                                 car.bids.push(newBid);
@@ -71,86 +64,59 @@ router.post('/:id/bid',(req,res) => {
                                 res
                                     .status(200)
                                     .send(newBid)
-
-
-                        }
-
-
-                        }
-
-                        else {
-                            console.log("8")
-
+                            }
+                        } else {
                             res
                                 .status(404)
-                                .send({"msg":"offer to low"})
-
+                                .send({"msg": "offer to low"})
                         }
 
-
+                    } else {
+                        if (offer > car.price) {
+                            console.log("9")
+                            const newBid = new bidCreation.makeABid(car.id, user.username, offer);
+                            car.price = offer;
+                            user.myBids.push(newBid)
+                            car.bids.push(newBid);
+                            res
+                                .status(200)
+                                .send(newBid)
+                        } else {
+                            res
+                                .status(404)
+                                .send({"msg": "offer to low"})
+                        }
                     }
-                else {
-                    if (offer > car.price) {
-
-                        console.log("9")
-                        const newBid = new bidCreation.makeABid(car.id,user.username,offer);
-                        car.price = offer;
-
-                        user.myBids.push(newBid)
-                        car.bids.push(newBid);
-
-                        res
-                            .status(200)
-                            .send(newBid)
-                    }
-                       else {
-                        res
-                            .status(404)
-                            .send({"msg":"offer to low"})
-
-                    }
-                    }
-
-
-
-                }
-                else {
+                } else {
                     console.log("10")
                     res
                         .status(StatusCodes.NOT_FOUND)
-                        .send( {"msg":`car (id: ${id}) not found`});
+                        .send({"msg": `car (id: ${id}) not found`});
                 }
-            }
-            else {
+            } else {
                 console.log("11")
                 res
                     .status(400)
                     .send({"msg": ",user cant be found"});
             }
-        }
-        else {
+        } else {
             console.log("11")
             res
                 .status(400)
                 .send({"msg": ",Your not logged in"});
         }
-    }
-
-    else {
+    } else {
         console.log("12")
         res
             .status(401)
-            .send({"msg":"Log in first"})
-
+            .send({"msg": "Log in first"})
     }
-
-
 });
 
-router.delete('/:id/bid',(req,res) => {
+router.delete('/:id/bid', (req, res) => {
     const id = parseInt(req.params.id);
     const offer = req.body.offer;
-    const  bearerHeader = req.headers[`authorization`];
+    const bearerHeader = req.headers[`authorization`];
     let user;
     let car;
     let foundOffer;
@@ -160,37 +126,34 @@ router.delete('/:id/bid',(req,res) => {
         const token = bearerHeader.split(' ')[1]
         const tokenPayLoad = admin.isTokenValid(token);
 
-        if(tokenPayLoad) {
+        if (tokenPayLoad) {
             console.log("2")
             user = auction.users.find(element => element.username === tokenPayLoad.username);
-            if(user){
+            if (user) {
                 console.log("3")
                 car = auction.cars.find(element => element.id === id);
                 const itemToDelete = car.bids.indexOf(offer)
                 const itemToDeleteUser = user.myBids.indexOf(offer)
 
-                user.myBids.splice(itemToDeleteUser,1)
-                car.bids.splice(itemToDelete,1)
+                user.myBids.splice(itemToDeleteUser, 1)
+                car.bids.splice(itemToDelete, 1)
 
                 res
                     .status(200)
                     .send(car.bids)
-            }
-            else {
+            } else {
                 console.log("8")
                 res
                     .status(400)
                     .send({"msg": "user couldn't been found"});
             }
-        }
-        else {
+        } else {
             console.log("9")
             res
                 .status(401)
                 .send({"msg": "Your not logged in"});
         }
-    }
-    else {
+    } else {
         console.log("10")
         res
             .status(401)

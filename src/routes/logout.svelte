@@ -6,10 +6,7 @@
     let tokenJson = get(store).token;
 
     onMount(async () => {
-
-       store.update(n => n -1);
-
-
+        store.update(n => n - 1);
     });
 
 </script>
@@ -17,7 +14,5 @@
 <h1>Tot ziens</h1>
 
 <style>
-
-
 
 </style>

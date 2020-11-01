@@ -1,9 +1,11 @@
 const bcrypt = require("bcrypt");
-const  { v4:uuid4 } = require (`uuid`);
+const {v4: uuid4} = require(`uuid`);
 const saltRounds = 10;
-const generatePasswordHash = (plainPassword => {return bcrypt.hashSync(plainPassword, saltRounds);})
+const generatePasswordHash = (plainPassword => {
+    return bcrypt.hashSync(plainPassword, saltRounds);
+})
 
-function createUser(id,username,email, password) {
+function createUser(id, username, email, password) {
     this.id = id;
     this.username = username;
     this.email = email;
@@ -14,7 +16,7 @@ function createUser(id,username,email, password) {
     this.myBids = [];
 }
 
-module.exports =  {
+module.exports = {
 
     createUser
 

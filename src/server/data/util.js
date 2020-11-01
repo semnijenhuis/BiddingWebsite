@@ -1,27 +1,3 @@
-import { writable } from 'svelte/store'
-
-export function createFieldValidator (...validators) {
-    const { subscribe, set } = writable({ dirty: false, valid: false, message: null })
-    const validator = buildValidator(validators)
-
-    function action (node, binding) {
-        function validate (value, dirty) {
-            const result = validator(value, dirty)
-            set(result)
-        }
-
-        validate(binding, false)
-
-        return {
-            update (value) {
-                validate(value, true)
-            }
-        }
-    }
-
-    return [ { subscribe }, action ]
-}
-
 export function passwordValidator(password) {
 
     let passwordCheck = false
@@ -29,7 +5,7 @@ export function passwordValidator(password) {
     let digitalCheck = false
     let capitalCheck = false
 
-    if (password.length > 5){
+    if (password.length > 5) {
         lengthCheck = true
     }
 
@@ -37,14 +13,13 @@ export function passwordValidator(password) {
         let letter = password.charAt(i)
         if (letter >= 0 && letter <= 9) {
             digitalCheck = true
-        }
-        else if (letter == letter.toUpperCase()){
+        } else if (letter == letter.toUpperCase()) {
             capitalCheck = true
         }
 
     }
 
-    if (lengthCheck && capitalCheck && digitalCheck === true){
+    if (lengthCheck && capitalCheck && digitalCheck === true) {
         passwordCheck = true
     }
 
@@ -67,21 +42,19 @@ export function emailValidator(email) {
 
         if (splitemail[0] == "") {
             console.log("beginning is empty")
-        }
-        else {
+        } else {
             textBeforeCheck = true
         }
 
         if (splitemail[1] == "") {
             console.log("ending is empty")
-        }
-        else {
-            textAFterCheck =true
+        } else {
+            textAFterCheck = true
         }
 
         const splitend = splitemail[1].split('.')
 
-        if (splitend){
+        if (splitend) {
             const lastitem = splitend[splitend.length - 1]
 
             if (lastitem === "nl" || lastitem === "com") {
@@ -90,42 +63,14 @@ export function emailValidator(email) {
         }
 
 
-
     }
 
 
-
-
-    if (appelstrofCheck && textBeforeCheck && textAFterCheck && textEndCheck  === true){
+    if (appelstrofCheck && textBeforeCheck && textAFterCheck && textEndCheck === true) {
         emailcheck = true
     }
 
 
-
     return emailcheck
-}
-
-
-
-export function requiredValidator () {
-    return function required (value) {
-        return (value !== undefined && value !== null && value !== '') || 'This field is required'
-    }
-}
-
-export function buildValidator (validators) {
-    return function validate (value, dirty) {
-        if (!validators || validators.length === 0) {
-            return { dirty, valid: true }
-        }
-
-        const failing = validators.find(v => v(value) !== true)
-
-        return {
-            dirty,
-            valid: !failing,
-            message: failing && failing(value)
-        }
-    }
 }
 
