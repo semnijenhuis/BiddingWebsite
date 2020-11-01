@@ -56,7 +56,7 @@ router.get('/',(req, res) => {
 router.get('/won',(req, res) => {
     const  bearerHeader = req.headers[`authorization`];
 
-    if (bearerHeader) {
+    if (bearerHeader !== "Bearer undefined") {
         const token = bearerHeader.split(' ')[1]
         const tokenPayLoad = admin.isTokenValid(token);
 
@@ -79,9 +79,13 @@ router.get('/won',(req, res) => {
                 .send({"msg": "Authentication required"});
         }
     }
-    res
-        .status(401)
-        .send({"msg": "Authentication required"});
+    else {
+
+        res
+            .status(401)
+            .send({"msg": "Authentication required"});
+    }
+
 });
 
 router.get('/mybids',(req, res) => {
@@ -89,7 +93,7 @@ router.get('/mybids',(req, res) => {
     const  bearerHeader = req.headers[`authorization`];
 
     console.log("1")
-    if (bearerHeader) {
+    if (bearerHeader !== "Bearer undefined") {
         console.log("2")
         const token = bearerHeader.split(' ')[1]
 
@@ -111,7 +115,7 @@ router.get('/mybids',(req, res) => {
                 console.log("5")
                 res
                     .status(204)
-                    .send("no bids here")
+                    .send({"msg":"no bids here"})
             }
         }
         else {
@@ -125,7 +129,7 @@ router.get('/mybids',(req, res) => {
         console.log("7")
         res
             .status(401)
-            .send({"msg": "No header"});
+            .send({"msg": "Header is empty, you need to log in"});
 
     }
 });
