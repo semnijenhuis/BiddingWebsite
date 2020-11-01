@@ -6,7 +6,7 @@ const admin = require('../data/admin');
 const carCreation = require('../data/cars');
 
 router.get('/', (req, res) => {
-    console.log("good")
+
     const userCopy = JSON.parse(JSON.stringify(auction.cars));
     res
         .status(200)
@@ -166,7 +166,6 @@ router.delete('/:id', (req, res) => {
 
     if (bearerHeader !== "Bearer undefined") {
         const token = bearerHeader.split(' ')[1]
-        console.log(bearerHeader)
 
         if (token) {
             const tokenPayLoad = admin.isTokenValid(token);
@@ -188,7 +187,6 @@ router.delete('/:id', (req, res) => {
                         }
                     }
                 } else {
-                    console.log("your not a admin")
                     res
                         .status(401)
                         .send({"msg": "Your not a Admin"});

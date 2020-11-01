@@ -7,8 +7,8 @@
     let password;
     let error;
 
+    // lets you login
     const doLogin = async (e) => {
-        console.log("hello")
         e.preventDefault();
 
         const response = await fetch('/auth', {
@@ -23,8 +23,7 @@
         if (response.status === 200) {
             const token = await response.json();
             store.set(token)
-            let tokenJson = get(store).token;
-            console.log(tokenJson)
+
 
             goto('/')
 

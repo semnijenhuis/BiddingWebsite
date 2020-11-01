@@ -1,13 +1,13 @@
 const carCreation = require('./cars');
 const userCreation = require('./users');
-const bidCreation = require('./bid');
+
 
 const admin = new userCreation.createUser(0, "admin", "admin@admin", "admin", ["admin"]);
 admin.roles.push("admin")
 const owner1 = new userCreation.createUser(1, "sem", "sem@crazybids.nl", "test", ["user", "student"]);
 owner1.roles.push("user")
 owner1.roles.push("student")
-const owner2 = new userCreation.createUser(2, "stephen", "stephen@crazybids.nl", "tom123", ["admin", "boss"]);
+const owner2 = new userCreation.createUser(2, "stephen", "stephen@crazybids.nl", "test", ["admin", "boss"]);
 owner2.roles.push("admin")
 owner2.roles.push("boss")
 const owner3 = new userCreation.createUser(3, "alex", "alex@crazybids.nl", "alex123", ["user", "tester"]);

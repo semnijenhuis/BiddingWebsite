@@ -5,6 +5,7 @@
 
     let tokenJson = get(store).token;
 
+    // lets you log out
     onMount(async () => {
         store.update(n => n - 1);
     });

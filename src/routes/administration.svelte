@@ -21,6 +21,7 @@
     let error;
     let tokenJson = get(store).token;
 
+    // get all cars
     async function getCars() {
         const response = await fetch('/cars', {
             method: "GET",
@@ -32,21 +33,22 @@
 
         });
         cars = await response.json();
-        console.log(cars)
-        console.log("end");
+
+
 
     }
 
+    // starts of when page is loaded
     onMount(async () => {
-        console.log("start")
+
 
         await getCars()
     });
 
+    // deletes the car you pressed
     async function pressedCar(choosen) {
-        console.log(choosen)
         carID = choosen.id
-        console.log(carID)
+
 
 
         const response = await fetch(`/cars/${carID}`, {
@@ -72,10 +74,10 @@
 
     }
 
+    // updates the car with the new provided information
     async function updateCar(choosenCar) {
         let choosenCarID = choosenCar.id
-        console.log(choosenCarID)
-        console.log("update car")
+
 
 
         const response = await fetch(`/cars/${choosenCarID}`, {
@@ -99,8 +101,7 @@
         if (response.status === 200) {
             cars = cars
             editAuction = false
-            console.log(choosenCar)
-            console.log("update went well")
+
         } else {
 
             error = await response.json();
@@ -111,6 +112,7 @@
 
     }
 
+    // lets you add a new car
     const addCar = async (e) => {
         e.preventDefault();
 
@@ -144,8 +146,9 @@
         }
     }
 
+    // is activated when you want to start editing a car
     function editCar(car) {
-        console.log("pressed car")
+
         editAuction = true
         choosenCar = car
     }
@@ -155,7 +158,6 @@
 
 
 <svelte:head>
-    <link rel="stylesheet" href="public/styles.css">
     <title>Sapper project template</title>
 </svelte:head>
 

@@ -73,7 +73,6 @@ router.post('/:id/bid', (req, res) => {
 
                     } else {
                         if (offer > car.price) {
-                            console.log("9")
                             const newBid = new bidCreation.makeABid(car.id, user.username, offer);
                             car.price = offer;
                             user.myBids.push(newBid)
@@ -88,25 +87,25 @@ router.post('/:id/bid', (req, res) => {
                         }
                     }
                 } else {
-                    console.log("10")
+
                     res
                         .status(StatusCodes.NOT_FOUND)
                         .send({"msg": `car (id: ${id}) not found`});
                 }
             } else {
-                console.log("11")
+
                 res
                     .status(400)
                     .send({"msg": ",user cant be found"});
             }
         } else {
-            console.log("11")
+
             res
                 .status(400)
                 .send({"msg": ",Your not logged in"});
         }
     } else {
-        console.log("12")
+
         res
             .status(401)
             .send({"msg": "Log in first"})
@@ -122,15 +121,15 @@ router.delete('/:id/bid', (req, res) => {
     let foundOffer;
 
     if (bearerHeader) {
-        console.log("1")
+
         const token = bearerHeader.split(' ')[1]
         const tokenPayLoad = admin.isTokenValid(token);
 
         if (tokenPayLoad) {
-            console.log("2")
+
             user = auction.users.find(element => element.username === tokenPayLoad.username);
             if (user) {
-                console.log("3")
+
                 car = auction.cars.find(element => element.id === id);
                 const itemToDelete = car.bids.indexOf(offer)
                 const itemToDeleteUser = user.myBids.indexOf(offer)
@@ -142,19 +141,18 @@ router.delete('/:id/bid', (req, res) => {
                     .status(200)
                     .send(car.bids)
             } else {
-                console.log("8")
+
                 res
                     .status(400)
                     .send({"msg": "user couldn't been found"});
             }
         } else {
-            console.log("9")
             res
                 .status(401)
                 .send({"msg": "Your not logged in"});
         }
     } else {
-        console.log("10")
+
         res
             .status(401)
             .send({"msg": "No bareheaded"});

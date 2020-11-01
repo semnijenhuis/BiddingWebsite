@@ -81,15 +81,14 @@ router.get('/mybids', (req, res) => {
 
     const bearerHeader = req.headers[`authorization`];
 
-    console.log("1")
     if (bearerHeader !== "Bearer undefined") {
-        console.log("2")
+
         const token = bearerHeader.split(' ')[1]
 
         const tokenPayLoad = admin.isTokenValid(token);
 
         if (tokenPayLoad) {
-            console.log("3")
+
             const user = auction.users.find(element => element.username === tokenPayLoad.username);
             if (user.myBids.length > 0) {
 
@@ -97,19 +96,19 @@ router.get('/mybids', (req, res) => {
                     .status(200)
                     .send(user.myBids)
             } else {
-                console.log("5")
+
                 res
                     .status(204)
                     .send({"msg": "no bids here"})
             }
         } else {
-            console.log("6")
+
             res
                 .status(401)
                 .send({"msg": "No token Payload"});
         }
     } else {
-        console.log("7")
+
         res
             .status(401)
             .send({"msg": "Header is empty, you need to log in"});

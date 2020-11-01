@@ -9,6 +9,7 @@
     let error;
     let valid = false
 
+    // lets you register
     const doRegister = async (e) => {
         e.preventDefault();
         if (emailValidator(email) === true && passwordValidator(password) === true && password === passwordCheck) {

@@ -49,15 +49,14 @@ router.post('/', (req, res) => {
             newUser = new userCreation.createUser(admin.randomUserID(), userData.username, userData.email, userData.password, userData.roles);
             newUser.roles.push("user")
             auction.users.push(newUser);
-            console.log("its created")
             res
                 .send(newUser)
                 .status(200)
         } else {
 
-            console.log("allreaadyyyyy")
             res
                 .status(400)
+                .body({"msg": "already excist"})
         }
 
     } else {

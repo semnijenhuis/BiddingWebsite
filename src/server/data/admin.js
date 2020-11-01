@@ -2,6 +2,7 @@ const bcrypt = require(`bcrypt`);
 const auction = require('./auction');
 const jwt = require(`jsonwebtoken`);
 
+// check if the token is valid
 function isTokenValid(token) {
     const tokenPayLoad = jwt.decode(token);
     const user = auction.users.find(element => element.username === tokenPayLoad.username);
@@ -15,6 +16,7 @@ function isTokenValid(token) {
     return false;
 }
 
+// login function
 const login = (username, password) => {
     const user = auction.users.find(element => element.username === username);
 
@@ -27,16 +29,19 @@ const login = (username, password) => {
     return false;
 };
 
+// filter user
 function filterUser(user) {
     const {secret, password, ...resource} = user;
     return resource;
 }
 
+// filters the cars
 function filterCar(car) {
     const {auctionEndDateYear, auctionEndDateMonth, auctionEndDateDay, user, ...resource} = car;
     return resource;
 }
 
+// helps you find a user
 function findUser(username) {
 
     if (username) {
@@ -50,6 +55,7 @@ function findUser(username) {
     }
 }
 
+// creates random number for car ID
 function randomCarID() {
     let numb = Math.floor((Math.random() * 10000000) + 1);
     const car = auction.cars.find(element => element.id === numb);
@@ -59,6 +65,7 @@ function randomCarID() {
     return numb
 }
 
+// creates random number for user ID
 function randomUserID() {
     let numb = Math.floor((Math.random() * 10000000) + 2);
     const car = auction.users.find(element => element.id === numb);
@@ -68,6 +75,7 @@ function randomUserID() {
     return numb
 }
 
+// looks if any auction is passed date and checks who won
 function refreshWinners() {
     let d = new Date();
     const today = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())

@@ -1,6 +1,5 @@
 <script>
 
-
     import {onMount} from "svelte";
 
 
@@ -30,8 +29,7 @@
         "offertime": ""
     }
 
-    console.log(tokenJson)
-
+    // refreshes the prices
     function checkPrices() {
         for (let i = 0; i < cars.length; i++) {
             let checkCar = cars[i]
@@ -41,8 +39,8 @@
         }
     }
 
+    // lets you add a bid
     const addBid = async (amount) => {
-        console.log("starting to bid")
 
         const response = await fetch(`/cars/${carID}/bid`, {
             method: "POST",
@@ -83,16 +81,16 @@
         }
     }
 
+    // fills in the information of choosen car on the one you've pressed
     function pressedCar(choosen) {
-        console.log("pressed car")
         showModal = true
         choosenCar = choosen
         choosenBids = choosen.bids
         carID = choosen.id
     }
 
+    // refreshes all of the cars
     async function refreshCars() {
-        console.log("refresh cars " + find)
 
         const response = await fetch('/cars', {
             method: "GET",
@@ -108,6 +106,7 @@
 
     }
 
+    // starts of running the page
     onMount(async () => {
 
         await refreshCars()
@@ -115,6 +114,7 @@
 
     });
 
+    // gets a specefic car
     const getCar = async (e) => {
 
         e.preventDefault();
@@ -131,7 +131,6 @@
 
         if (response.status === 200) {
             const token = await response.json();
-            console.log(token)
             goto(`/cars/${carID}`)
 
         } else {
@@ -140,10 +139,10 @@
         }
     }
 
+    // lets you search for something you want to filter on
     const findItem = async (e) => {
         e.preventDefault();
-        console.log("findItem")
-        console.log(searchTerm)
+
 
         if (searchTerm) {
             const response = await fetch(`/filter/search/${searchTerm}`, {

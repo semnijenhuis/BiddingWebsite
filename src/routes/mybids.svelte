@@ -11,6 +11,7 @@
     let error;
     let offer;
 
+    // lets you remove a bid tha you pressed
     async function pressedBid(choosen) {
         carID = choosen.carID
         offer = choosen.offer
@@ -52,6 +53,7 @@
 
     }
 
+    // gets all bids starting the page
     onMount(async () => {
         const response = await fetch('/auth/mybids', {
             method: "GET",
@@ -63,7 +65,6 @@
         });
         if (response.status === 200) {
             myBids = await response.json();
-            console.log(myBids)
             table = true
         } else {
             error = await response.json();
